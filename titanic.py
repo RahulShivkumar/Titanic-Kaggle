@@ -63,6 +63,20 @@ def _getDeptCode(ticket):
     deptCode = ord(deptName[0]) + len(deptName)
     return deptCode
 
+#Keeping Siblings and Parents as two variables, Keep a Boolean for each as opposed to numbers
+def _getSiblingAndSpouse(sibSpouse):
+    if sibSpouse == '0':
+        sibSpouse = 0
+    else:
+        sibSpouse = 1
+    return sibSpouse
+
+def _getParentsAndChildren(parChild):
+    if parChild == '0':
+        parChild = 0
+    else:
+        parChild = 1
+    return parChild
 
 if __name__ == '__main__':
     p = OptionParser()
@@ -82,6 +96,8 @@ if __name__ == '__main__':
         row[4] = _convertGender(row[4])
         title = _getTitle(row[3])
         row[3] = _titleHash(title,row[4])
+        row[6] = _getSiblingAndSpouse(row[6])
+        row[7] = _getParentsAndChildren(row[7])
         row[8] = _getDeptCode(row[8])
         row[10] = _convertCabin(row[10])
         row[11] = _convertLocation(row[11])
@@ -89,7 +105,7 @@ if __name__ == '__main__':
     data = np.array(data)
 
     result = data[0::,1].astype(np.float)
-    features = data[0::,[2,3,4,8,10,11]].astype(np.float)
+    features = data[0::,[2,3,4,6,7,8,10,11]].astype(np.float)
     fare = data[0::,9].astype(np.float)
 
 
@@ -124,6 +140,8 @@ if __name__ == '__main__':
         row[7] = _getDeptCode(row[7])
         #if(row[8] == ''):
             #row[8] = np.mean(fare)
+        row[5] = _getSiblingAndSpouse(row[5])
+        row[6] = _getParentsAndChildren(row[6])
         row[9] = _convertCabin(row[9])
         row[10] = _convertLocation(row[10])
 
@@ -131,6 +149,8 @@ if __name__ == '__main__':
         unknownRow.append(row[1])
         unknownRow.append(row[2])
         unknownRow.append(row[3])
+        unknownRow.append(row[5])
+        unknownRow.append(row[6])
         unknownRow.append(row[7])
         unknownRow.append(row[9])
         unknownRow.append(row[10])
