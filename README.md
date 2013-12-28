@@ -27,4 +27,8 @@ An example of its usage within command line:  <br>
 ```
 Python titanic.py -T /Users/YourUsername/Kaggle/Titanic/train.csv -t /Users/YourUsername/Kaggle/Titanic/test.csv -r /Users/YourUsername/Kaggle/Titanic/result.csv
 ```
+References
+==========
+[Scikit-Learn Docs](http://scikit-learn.org/stable/documentation.html)<br>
+[Machine learning - Random forests](http://www.youtube.com/watch?v=3kYujfDgmNk)
 
