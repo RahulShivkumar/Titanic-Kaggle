@@ -89,8 +89,6 @@ if __name__ == '__main__':
 
     result = data[0::,1].astype(np.float)
     features = data[0::,[2,3,4,6,8,11]].astype(np.float)
-    fare = data[0::,9].astype(np.float)
-
 
     #Our Forest is ready to Rock N Roll
     forest = RandomForestClassifier(n_estimators = 1000)
