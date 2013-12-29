@@ -46,15 +46,6 @@ def _convertLocation(location):
             location = 2
     return location
 
-#Take the cabin number and covert it into a code
-def _convertCabin(cabinNum):
-    if len(cabinNum) == 0:
-        cabinCode = 0
-    else:
-        cabinCode = re.sub(r"$\d+\W+|\b\d+\b|\W+\d+$", "", cabinNum)
-        cabinCode = ord(cabinCode[0])
-    return cabinCode
-
 #Pull out the department from their ticket number. If this isn't present assume it to be zero
 def _getDeptCode(ticket):
     deptName = re.sub(r"$\d+\W+|\b\d+\b|\W+\d+$", "", ticket)
@@ -63,20 +54,14 @@ def _getDeptCode(ticket):
     deptCode = ord(deptName[0]) + len(deptName)
     return deptCode
 
-#Keeping Siblings and Parents as two variables, Keep a Boolean for each as opposed to numbers
-def _getSiblingAndSpouse(sibSpouse):
-    if sibSpouse == '0':
-        sibSpouse = 0
-    else:
-        sibSpouse = 1
-    return sibSpouse
 
-def _getParentsAndChildren(parChild):
-    if parChild == '0':
-        parChild = 0
+#Keep a Boolean for the family on the whole (tested by splitting parChild and sibSpouse but the results are the same
+def _getFamily(sibSpouse, parChild):
+    if int(sibSpouse) + int(parChild) > 0:
+        family = 1
     else:
-        parChild = 1
-    return parChild
+        family = 0
+    return family    
 
 if __name__ == '__main__':
     p = OptionParser()
@@ -96,16 +81,14 @@ if __name__ == '__main__':
         row[4] = _convertGender(row[4])
         title = _getTitle(row[3])
         row[3] = _titleHash(title,row[4])
-        row[6] = _getSiblingAndSpouse(row[6])
-        row[7] = _getParentsAndChildren(row[7])
+        row[6] = _getFamily(row[6], row[7])
         row[8] = _getDeptCode(row[8])
-        row[10] = _convertCabin(row[10])
         row[11] = _convertLocation(row[11])
         data.append(row)
     data = np.array(data)
 
     result = data[0::,1].astype(np.float)
-    features = data[0::,[2,3,4,6,7,8,10,11]].astype(np.float)
+    features = data[0::,[2,3,4,6,8,11]].astype(np.float)
     fare = data[0::,9].astype(np.float)
 
 
@@ -138,11 +121,7 @@ if __name__ == '__main__':
         title = _getTitle(row[2])
         row[2] = _titleHash(title,row[3])
         row[7] = _getDeptCode(row[7])
-        #if(row[8] == ''):
-            #row[8] = np.mean(fare)
-        row[5] = _getSiblingAndSpouse(row[5])
-        row[6] = _getParentsAndChildren(row[6])
-        row[9] = _convertCabin(row[9])
+        row[5] = _getFamily(row[5], row[6])
         row[10] = _convertLocation(row[10])
 
         #Set Up data to send into our predictor
@@ -150,9 +129,8 @@ if __name__ == '__main__':
         unknownRow.append(row[2])
         unknownRow.append(row[3])
         unknownRow.append(row[5])
-        unknownRow.append(row[6])
+        #unknownRow.append(row[6])
         unknownRow.append(row[7])
-        unknownRow.append(row[9])
         unknownRow.append(row[10])
         unknownRow = np.array(unknownRow)
         unknownRow.astype(np.float)
