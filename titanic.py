@@ -129,7 +129,6 @@ if __name__ == '__main__':
         unknownRow.append(row[2])
         unknownRow.append(row[3])
         unknownRow.append(row[5])
-        #unknownRow.append(row[6])
         unknownRow.append(row[7])
         unknownRow.append(row[10])
         unknownRow = np.array(unknownRow)
